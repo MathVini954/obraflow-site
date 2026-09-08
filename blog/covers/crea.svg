@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Registro no CREA e ART">
+  <rect width="800" height="450" fill="#0b1a33"/>
+  <rect x="230" y="52" width="340" height="346" rx="10" fill="#12305a" stroke="#2a4c80"/>
+  <rect x="230" y="52" width="340" height="346" rx="10" fill="none" stroke="#2a4c80"/>
+  <rect x="258" y="86" width="284" height="278" rx="4" fill="#0e2140"/>
+  <text x="400" y="128" fill="#7db3ff" font-family="Inter,Arial,sans-serif" font-size="16" font-weight="700" letter-spacing="2" text-anchor="middle">ART</text>
+  <text x="400" y="150" fill="#8fa1bd" font-family="Inter,Arial,sans-serif" font-size="11" text-anchor="middle">Anotação de Responsabilidade Técnica</text>
+  <g stroke="#22406e"><line x1="282" y1="182" x2="518" y2="182"/><line x1="282" y1="214" x2="518" y2="214"/><line x1="282" y1="246" x2="518" y2="246"/><line x1="282" y1="278" x2="518" y2="278"/></g>
+  <g font-family="Inter,Arial,sans-serif" font-size="12" fill="#9fb2cc">
+    <text x="282" y="176">Responsável técnico</text><text x="518" y="176" fill="#c7d3e6" text-anchor="end">Eng. Civil · CREA-PE</text>
+    <text x="282" y="208">Obra</text><text x="518" y="208" fill="#c7d3e6" text-anchor="end">Residencial unifamiliar</text>
+    <text x="282" y="240">Atividade</text><text x="518" y="240" fill="#c7d3e6" text-anchor="end">Execução</text>
+    <text x="282" y="272">Situação</text><text x="518" y="272" fill="#6bd39a" text-anchor="end">Registrada</text>
+  </g>
+  <circle cx="400" cy="322" r="30" fill="none" stroke="#7db3ff" stroke-width="2.5"/>
+  <path d="M386 322l10 10 20-22" fill="none" stroke="#7db3ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
