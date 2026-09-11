@@ -13,7 +13,7 @@
 (function () {
   'use strict';
 
-  var ACCESS_KEY = 'COLE_AQUI_SUA_CHAVE_DO_WEB3FORMS';
+  var ACCESS_KEY = '5908c080-16af-4f83-a3df-f20396711e79';
   var WA_NUMERO = '5581985576458';
 
   function waHref(nome, empresa, cidade, obras) {
