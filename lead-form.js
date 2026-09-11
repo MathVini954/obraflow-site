@@ -16,13 +16,19 @@
   var ACCESS_KEY = '5908c080-16af-4f83-a3df-f20396711e79';
   var WA_NUMERO = '5581985576458';
 
-  function waHref(nome, empresa, cidade, obras) {
+  function waHref(nome, email, empresa, cidade, obras) {
     var msg = 'Olá! Preenchi o formulário do site pedindo uma demonstração do ObraFlow.\n\n' +
       'Nome: ' + nome + '\n' +
+      'E-mail: ' + (email || '-') + '\n' +
       'Construtora: ' + (empresa || '-') + '\n' +
       'Cidade: ' + (cidade || '-') + '\n' +
       'Obras por ano (aprox.): ' + (obras || '-') + '\n\n' +
       'Fico no aguardo!';
+    return 'https://wa.me/' + WA_NUMERO + '?text=' + encodeURIComponent(msg);
+  }
+
+  function skipWaHref() {
+    var msg = 'Olá! Vim pelo site do ObraFlow e quero adiantar o processo — vamos direto pro WhatsApp?';
     return 'https://wa.me/' + WA_NUMERO + '?text=' + encodeURIComponent(msg);
   }
 
@@ -51,7 +57,10 @@
     '.lm-ok-mark{width:52px;height:52px;border-radius:50%;background:rgba(48,209,88,.15);color:#1a7f4b;display:grid;place-items:center;margin:0 auto 14px}' +
     '.lm-ok-mark svg{width:24px;height:24px}' +
     '.lm-wa-btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;width:100%;border:0;border-radius:980px;background:#25d366;color:#fff;text-decoration:none;font-size:15px;font-weight:500;padding:13px;box-sizing:border-box;margin-top:6px}' +
-    '.lm-wa-btn:hover{opacity:.92;text-decoration:none}';
+    '.lm-wa-btn:hover{opacity:.92;text-decoration:none}' +
+    '.lm-skip{display:block;text-align:center;font-size:13px;color:var(--ink-2,#6e6e73);margin:0 0 18px;padding:10px 12px;background:var(--bg-alt,#f5f5f7);border-radius:11px}' +
+    '.lm-skip a{color:var(--link,#0066cc);font-weight:500;text-decoration:none}' +
+    '.lm-skip a:hover{text-decoration:underline}';
 
   function el(tag, cls, html) {
     var e = document.createElement(tag);
@@ -111,13 +120,19 @@
     modal.appendChild(el('p', 'lm-eyebrow', 'ObraFlow'));
     modal.appendChild(titleEl);
     modal.appendChild(el('p', 'lm-sub', 'Preencha e a gente entra em contato pra combinar o melhor horário. Sem cadastro no sistema, sem compromisso.'));
+    modal.appendChild(el('p', 'lm-skip', 'Já quer adiantar o processo? <a class="lm-skip-link" href="#">Chama a gente no WhatsApp</a>.'));
 
     formEl = el('form');
     formEl.noValidate = true;
     formEl.innerHTML =
-      '<div class="lm-field"><label for="lmNome">Nome *</label><input class="lm-input" id="lmNome" name="nome" required autocomplete="name"></div>' +
-      '<div class="lm-field"><label for="lmFone">WhatsApp *</label><input class="lm-input" id="lmFone" name="telefone" type="tel" placeholder="(81) 9xxxx-xxxx" required autocomplete="tel"></div>' +
-      '<div class="lm-field"><label for="lmEmpresa">Construtora *</label><input class="lm-input" id="lmEmpresa" name="empresa" required autocomplete="organization"></div>' +
+      '<div class="lm-row2">' +
+        '<div class="lm-field"><label for="lmNome">Nome *</label><input class="lm-input" id="lmNome" name="nome" required autocomplete="name"></div>' +
+        '<div class="lm-field"><label for="lmEmail">E-mail *</label><input class="lm-input" id="lmEmail" name="email" type="email" placeholder="voce@empresa.com" required autocomplete="email"></div>' +
+      '</div>' +
+      '<div class="lm-row2">' +
+        '<div class="lm-field"><label for="lmFone">WhatsApp *</label><input class="lm-input" id="lmFone" name="telefone" type="tel" placeholder="(81) 9xxxx-xxxx" required autocomplete="tel"></div>' +
+        '<div class="lm-field"><label for="lmEmpresa">Construtora *</label><input class="lm-input" id="lmEmpresa" name="empresa" required autocomplete="organization"></div>' +
+      '</div>' +
       '<div class="lm-row2">' +
         '<div class="lm-field"><label for="lmCidade">Cidade</label><input class="lm-input" id="lmCidade" name="cidade" autocomplete="address-level2"></div>' +
         '<div class="lm-field"><label for="lmObras">Obras/ano</label><input class="lm-input" id="lmObras" name="obras" placeholder="ex.: 3"></div>' +
@@ -138,6 +153,11 @@
       '<a class="lm-wa-btn" id="lmWaLink" target="_blank" rel="noopener">Continuar no WhatsApp</a>';
     modal.appendChild(okEl);
 
+    var skipLink = modal.querySelector('.lm-skip-link');
+    skipLink.href = skipWaHref();
+    skipLink.target = '_blank';
+    skipLink.rel = 'noopener';
+
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
 
@@ -153,13 +173,19 @@
       if (formEl.botcheck && formEl.botcheck.value) return; // honeypot: bot preencheu, ignora silenciosamente
 
       var nome = formEl.nome.value.trim();
+      var email = formEl.email.value.trim();
       var telefone = formEl.telefone.value.trim();
       var empresa = formEl.empresa.value.trim();
       var cidade = formEl.cidade.value.trim();
       var obras = formEl.obras.value.trim();
 
-      if (!nome || !telefone || !empresa) {
-        errEl.textContent = 'Preencha nome, WhatsApp e construtora.';
+      if (!nome || !email || !telefone || !empresa) {
+        errEl.textContent = 'Preencha nome, e-mail, WhatsApp e construtora.';
+        errEl.classList.add('is-on');
+        return;
+      }
+      if (email.indexOf('@') === -1 || email.indexOf('.') === -1) {
+        errEl.textContent = 'Confira o e-mail informado.';
         errEl.classList.add('is-on');
         return;
       }
@@ -172,6 +198,7 @@
         subject: 'Novo pedido de demonstração — ObraFlow (site)',
         from_name: 'Site ObraFlow',
         nome: nome,
+        email: email,
         telefone: telefone,
         construtora: empresa,
         cidade: cidade || '-',
@@ -179,7 +206,7 @@
         pagina_origem: location.href
       };
 
-      var wa = waHref(nome, empresa, cidade, obras);
+      var wa = waHref(nome, email, empresa, cidade, obras);
 
       fetch('https://api.web3forms.com/submit', {
         method: 'POST',
